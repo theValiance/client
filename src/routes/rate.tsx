@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { IPostEntryParams, useUpdateEntry } from "../api/post-entry";
 import { useCountEntries } from "../api/count-entries";
 import css from './rate.module.css';
+import { MoonLoader } from "react-spinners";
 
 export function Component() {
 	const { vid } = useParams();
@@ -11,7 +12,7 @@ export function Component() {
 	const {
 		register,
 		handleSubmit,
-		//formState: { errors },
+		formState: { errors },
 	} = useForm<IPostEntryParams>({defaultValues: {
 		vid,
 		labels: {
@@ -44,8 +45,8 @@ export function Component() {
 
 		
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-2 min-h-100">
-			<h1 className="md:col-span-2 text-center text-2xl">New Rating</h1>
-			<h2 className="md:col-span-2 text-center">This song has been rated {countQuery.data?.count} times</h2>
+			<h1 className="md:col-span-2 text-right md:text-center text-2xl">New Rating</h1>
+			<h2 className="md:col-span-2 text-right md:text-center">This song has been rated {countQuery.data?.count} times</h2>
 			<iframe className="w-full aspect-video" src={`https://www.youtube.com/embed/${vid!}?feature=oembed`} referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
 			<div className="flex flex-col">
 				<div className="grow grid grid-rows-4">
@@ -78,23 +79,31 @@ export function Component() {
 						<input className={`${css.huebg} ${css.slider}`} id="colorInp" form="form" type="range" step="0.001" min="0" max="1" {...register('labels.color')} />
 					</div>
 				</div>
-				<div className="grid grid-cols-2 gap-x-5">
+				<div className="relative grid grid-cols-2 gap-x-5">
 					<label className="col-span-2" htmlFor="nameInp">Name:</label>
 					<input 
 						form="form" 
 						type="text"
 						className="border p-2"
 						id="nameInp"
-						placeholder="Enter a name..."
+						placeholder="Enter your name..."
 						{...register('name', {
 							minLength: {
 								value: 3,
 								message: 'Name must be at least 3 characters long.',
-							}
+							},
+							required: {
+								value: true,
+								message: 'Must provide a name!',
+							},
 						})} 
 					/>
-					<button className="border rounded-3xl bg-green-400 drop-shadow-md" form="form" type='submit'>Submit!</button>
+					<button className="border rounded-3xl bg-green-400 drop-shadow-md" form="form" type='submit' disabled={postEntry.isPending}>Submit!</button>
+					{errors.name?.message && <p className="text-sm text-red-600">{errors.name?.message.toString()}</p>}
 				</div>
+			</div>
+			<div className="flex place-content-center md:col-span-2">
+				{postEntry.isPending && <MoonLoader loading={true} />}
 			</div>
 		</div>
 	</>);

@@ -1,15 +1,15 @@
 .slider {
+	-webkit-appearance: none;
 	direction: ltr;
 	border-radius: 5px;
 	border-color: black;
 	border-width: 1px;
+	height: 22px;
 	margin-top: 5px;
 	outline: none;
 }
 
 .slider::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	appearance: none;
 	width: 15px;
 	height: 20px;
 	border-radius: 25%;
@@ -27,8 +27,8 @@
 	border-radius: 25%;
 	border-width: 4px;
 	border-color: black;
-	box-sizing: content-box;
 	border-style: solid;
+	box-sizing: content-box;
 	background: #00000000;
 	cursor: pointer;
 }
